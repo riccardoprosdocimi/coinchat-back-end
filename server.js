@@ -47,16 +47,15 @@ app.use(cors(
 }));
 
 const mongoStoreOptions = {
-    mongoUrl: process.env.MONGODB_URI,
-    ttl: 14 * 24 * 60 * 60, // session TTL in seconds (optional)
+    mongoUrl: connectionString,
 };
 const sessionStore = MongoStore.create(mongoStoreOptions);
 
 let sess = {
     secret: process.env.SECRET,
     store: sessionStore,
-    saveUninitialized: true,
-    resave: true,
+    saveUninitialized: false,
+    resave: false,
     cookie: {
         sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
         secure: process.env.NODE_ENV === "production",
