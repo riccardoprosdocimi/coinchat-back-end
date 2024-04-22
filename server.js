@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
-import session from "express-session"
+import session from "express-session";
 import mongoose from "mongoose";
-import * as dotenv from "dotenv"
+import MongoStore from "connect-mongo";
+import * as dotenv from "dotenv";
 import SearchController from "./controllers/search-page-controllers/search-controller.js";
 import DetailsController from "./controllers/detail-page-controllers/coin-details-controller.js";
 import MarketChartController from "./controllers/detail-page-controllers/coin-market-controller.js";
@@ -45,8 +46,15 @@ app.use(cors(
         origin: true
 }));
 
+const mongoStoreOptions = {
+    mongoUrl: process.env.MONGODB_URI,
+    ttl: 14 * 24 * 60 * 60, // session TTL in seconds (optional)
+};
+const sessionStore = MongoStore.create(mongoStoreOptions);
+
 let sess = {
     secret: process.env.SECRET,
+    store: sessionStore,
     saveUninitialized: true,
     resave: true,
     cookie: {
