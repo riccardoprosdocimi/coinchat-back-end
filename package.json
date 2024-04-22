@@ -20,7 +20,7 @@
     "mongoose": "^6.7.3"
   },
   "engines": {
-    "node": "latest",
+    "node": "16.x.x",
     "npm": "latest"
   }
 }
