@@ -71,7 +71,7 @@ app.use(session(sess))
 app.use(express.json());
 
 app.get('/',(req, res) =>
-    res.send('CoinChat Back-End'));
+    res.send('CoinChat Back-End running...'));
 
 UsersController(app);
 SearchController(app);
