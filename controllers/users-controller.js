@@ -1,4 +1,5 @@
 import * as usersDao from '../daos/users-dao.js';
+import bcrypt from 'bcryptjs';
 
 const UsersController = app => {
     const createUser = async (req, res) => {
@@ -33,13 +34,24 @@ const UsersController = app => {
         res.json(status);
     };
     const login = async (req, res) => {
-        const credentials = req.body;
-        const existingUser = await usersDao.findByCredentials(credentials);
-        if (existingUser) {
-            req.session['currentUser'] = existingUser;
-            res.json(existingUser);
-        } else {
-            res.sendStatus(403);
+        const { handle, password } = req.body;
+        try {
+            const existingUser = await usersDao.findUserByUsername(handle);
+            if (!existingUser) {
+                console.log(existingUser)
+                return res.sendStatus(403); // User not found
+            }
+
+            const isMatch = await bcrypt.compare(password, existingUser.password);
+            if (isMatch) {
+                req.session['currentUser'] = existingUser;
+                res.json(existingUser);
+            } else {
+                res.sendStatus(403); // Passwords do not match
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            res.sendStatus(500);
         }
     };
     const profile = async (req, res) => {
@@ -75,4 +87,5 @@ const UsersController = app => {
     app.post('/api/users/profile', profile);
     app.post('/api/users/logout', logout);
 };
+
 export default UsersController;
