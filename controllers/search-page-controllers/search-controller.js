@@ -11,8 +11,9 @@ const SearchController = (app) => {
             .then((response) => {
                 res.json(response.data.coins);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(() => {
+                console.log("Failed to fetch search data");
+                res.status(500).json({error: "Failed to fetch search data"});
             });
     }
 

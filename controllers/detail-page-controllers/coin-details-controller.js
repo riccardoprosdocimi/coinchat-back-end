@@ -7,19 +7,16 @@ const DetailsController =  (app) => {
     async function getCoinData(req, res) {
         const coinID = req.query.coinID;
 
-        // Temporarily set the local to en
         await axios.get(`${coinGecko_GetCurrentData_API}${coinID}?localization=false`)
             .then((response) => {
                 res.json(response.data);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(() => {
+                console.log("Failed to fetch about data");
+                res.status(500).json({error: "Failed to fetch about data"});
             });
     }
-
     app.get("/detail/getCoinData", getCoinData);
-
-
 }
 
 export default DetailsController;

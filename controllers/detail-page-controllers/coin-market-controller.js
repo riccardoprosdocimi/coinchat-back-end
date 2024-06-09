@@ -15,8 +15,9 @@ const MarketChartController =  (app) => {
             .then((response) => {
                 res.json(response.data);
             })
-            .catch(error => {
-                console.log(error);
+            .catch(() => {
+                console.log("Failed to fetch chart data");
+                res.status(500).json({error: "Failed to fetch chart data"});
             });
     }
 
