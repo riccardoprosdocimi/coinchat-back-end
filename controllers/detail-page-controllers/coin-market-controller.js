@@ -1,5 +1,5 @@
 import axios from "axios";
-const coinGecko_coinMarket_API = "https://api.coingecko.com/api/v3/coins/"
+import {COINGECKO_COINS_API, COINGECKO_API_KEY} from "../../util/global-variables.js";
 
 
 const MarketChartController =  (app) => {
@@ -10,8 +10,7 @@ const MarketChartController =  (app) => {
             days = "1";
         }
 
-        // Temporarily set the local to en
-        await axios.get(`${coinGecko_coinMarket_API}${coinID}/market_chart?vs_currency=usd&days=${days}`)
+        await axios.get(`${COINGECKO_COINS_API}${coinID}/market_chart?vs_currency=usd&days=${days}&precision=full&x_cg_demo_api_key=${COINGECKO_API_KEY}`)
             .then((response) => {
                 res.json(response.data);
             })
